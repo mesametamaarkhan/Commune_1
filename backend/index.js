@@ -1,6 +1,8 @@
 import express from 'express';
 import cors from 'cors';
-import { PORT } from './config.js';
+import mongoose from 'mongoose';
+import { PORT, mongoDBCon } from './config.js';
+import UserRoutes from './routes/UserRoutes.js';
 
 const app = express();
 
@@ -10,9 +12,8 @@ app.use(express.json());
 //handling all cors (alternative is to use custom origins)
 app.use(cors()); 
 
-app.listen(PORT, () => {
-    console.log(`App is listening to port: ${PORT}`);
-});
+//other custom middleware (route handling)
+app.use('/user', UserRoutes);
 
 //landing page
 app.get('/', (req, res) => {
@@ -21,13 +22,13 @@ app.get('/', (req, res) => {
 });
 
 //connect database
-// mongoose.connect(mongoDBCon)
-//     .then(() => {
-//         console.log('MongoDB Connected');
-//         app.listen(PORT, () => {
-//             console.log(`App is listening to port: ${PORT}`);
-//         });
-//     })
-//     .catch((error) => {
-//         console.log(error.message);
-//     });
+mongoose.connect(mongoDBCon)
+    .then(() => {
+        console.log('MongoDB Connected');
+        app.listen(PORT, () => {
+            console.log(`App is listening to port: ${PORT}`);
+        });
+    })
+    .catch((error) => {
+        console.log(error.message);
+    });
