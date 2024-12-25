@@ -3,11 +3,13 @@ import cors from 'cors';
 import mongoose from 'mongoose';
 import { PORT, mongoDBCon } from './config.js';
 import UserRoutes from './routes/UserRoutes.js';
+import cookieParser from 'cookie-parser';
 
 const app = express();
 
 //middleware
 app.use(express.json());
+app.use(cookieParser());
 
 //handling all cors (alternative is to use custom origins)
 app.use(cors()); 
